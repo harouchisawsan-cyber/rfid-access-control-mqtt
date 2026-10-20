@@ -1,0 +1,278 @@
+[
+    {
+        "id": "d859d38904ecfecd",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "mqtt_input_node",
+        "type": "mqtt in",
+        "z": "d859d38904ecfecd",
+        "name": "Réception RFID",
+        "topic": "rfid/access",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "mqtt_broker_uir",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 280,
+        "wires": [
+            [
+                "3ca2ec77d04c113d",
+                "576527bfe0a483b7"
+            ]
+        ]
+    },
+    {
+        "id": "3ca2ec77d04c113d",
+        "type": "switch",
+        "z": "d859d38904ecfecd",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "ACCES_OK",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ACCES_REFUSE",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 370,
+        "y": 280,
+        "wires": [
+            [
+                "e61c7753c5dac2ff",
+                "0efe1c5724ca7330"
+            ],
+            [
+                "7c2a4445e304d24e",
+                "72e52f39c934e0fa"
+            ]
+        ]
+    },
+    {
+        "id": "7c2a4445e304d24e",
+        "type": "ui_text",
+        "z": "d859d38904ecfecd",
+        "group": "38ed180b0ef6d359",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "<i class=\"fa fa-exclamation-triangle\" style=\"color: #ff0000;\"></i> Alerte Sécurité :",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 900,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "e61c7753c5dac2ff",
+        "type": "ui_text",
+        "z": "d859d38904ecfecd",
+        "group": "38ed180b0ef6d359",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "<i class=\"fa fa-check-circle\" style=\"color: #00ff00;\"></i> Accès Autorisé",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1170,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "bc4b76cdafdd255e",
+        "type": "ui_audio",
+        "z": "d859d38904ecfecd",
+        "name": "",
+        "group": "38ed180b0ef6d359",
+        "voice": "",
+        "always": "",
+        "x": 940,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "72e52f39c934e0fa",
+        "type": "change",
+        "z": "d859d38904ecfecd",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"Attention, accès non autorisé !\"",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 700,
+        "y": 280,
+        "wires": [
+            [
+                "bc4b76cdafdd255e"
+            ]
+        ]
+    },
+    {
+        "id": "eeb9d6c9ebb75d63",
+        "type": "ui_text",
+        "z": "d859d38904ecfecd",
+        "group": "38ed180b0ef6d359",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Dernière activité :",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 790,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "576527bfe0a483b7",
+        "type": "function",
+        "z": "d859d38904ecfecd",
+        "name": "Horodatage",
+        "func": "var date = new Date();\nvar heure = date.getHours() + \":\" + date.getMinutes() + \":\" + date.getSeconds();\nmsg.payload = \"[\" + heure + \"] \" + msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 520,
+        "wires": [
+            [
+                "eeb9d6c9ebb75d63"
+            ]
+        ]
+    },
+    {
+        "id": "0efe1c5724ca7330",
+        "type": "ui_chart",
+        "z": "d859d38904ecfecd",
+        "name": "",
+        "group": "38ed180b0ef6d359",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "Fréquentation",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 870,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "mqtt_broker_uir",
+        "type": "mqtt-broker",
+        "name": "Local Broker",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "38ed180b0ef6d359",
+        "type": "ui_group",
+        "name": "CENTRE DE CONTRÔLE RFID (MQTT)",
+        "tab": "7592a886cc2e76bd",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7592a886cc2e76bd",
+        "type": "ui_tab",
+        "name": "Sécurité UIR",
+        "icon": "dashboard",
+        "order": 1
+    }
+]
